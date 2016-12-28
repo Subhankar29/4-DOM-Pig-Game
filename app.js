@@ -8,12 +8,9 @@ GAME RULES:
 - The first player to reach 100 points on GLOBAL score wins the game
 
 */
-var scores, roundScores, activePlayer;
+var scores, roundScores, activePlayer, gamePlaying;
 
-scores = [0,0];
-roundScore = 0;
-activePlayer = 0;
-
+init();
 //dice = Math.floor(Math.random() * 6) +1;
 //console.log(dice);
 
@@ -21,17 +18,12 @@ activePlayer = 0;
 //to interact with the webpage we first have to use document and use querySelelector to select the variable from the webpage and then manipulate it using textContext. 
 //document.querySelector('#current-' + activePlayer).innerHTML = '<em>' + dice + '</em>';
 //innerHTML can manupulate HTML while textcontent can only put texy in it. 
-document.querySelector('.dice').style.display='none';
-//to interact with css we have to (.) operator here we have used dice class which is not an unique id but a class name in general. 
 
-document.getElementById('score-0').textContent = '0';
-document.getElementById('score-1').textContent = '0';
-document.getElementById('current-0').textContent = '0';
-document.getElementById('current-1').textContent = '0';
-//getElementById is also a method like querySelector but it is a bit faster. 
 
 document.querySelector('.btn-roll').addEventListener('click', function(){
-    //1.Random Number
+    
+    if(gamePlaying){
+       //1.Random Number
     var dice = Math.floor(Math.random() * 6) +1;
     
     //2.Display the result
@@ -51,11 +43,15 @@ document.querySelector('.btn-roll').addEventListener('click', function(){
         //Next Player
         nextPlayer();
         
+      }   
     }
+    
 });
 
 document.querySelector('.btn-hold').addEventListener('click',function(){
-    //Add current score to Global SCore
+    
+    if(gamePlaying){
+       //Add current score to Global SCore
     scores[activePlayer] += roundScore;
     
     
@@ -69,16 +65,13 @@ document.querySelector('.btn-hold').addEventListener('click',function(){
             document.querySelector('.dice').style.display= 'none';
             document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
             document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
-            
+            gamePlaying = false;
         }else{
             //Next Player
             nextPlayer();
-        }
-    
-    
-    
-    
-    
+        }  
+    }
+   
 });
 
 function nextPlayer(){
@@ -98,4 +91,30 @@ function nextPlayer(){
         
         document.querySelector('.dice').style.display='none';
         
+}
+
+
+document.querySelector('.btn-new').addEventListener('click', init);
+
+
+function init(){
+    scores = [0,0];
+    activePlayer = 0;
+    roundScore = 0;
+    gamePlaying = true;
+    document.querySelector('.dice').style.display='none';
+//to interact with css we have to (.) operator here we have used dice class which is not an unique id but a class name in general. 
+
+document.getElementById('score-0').textContent = '0';
+document.getElementById('score-1').textContent = '0';
+document.getElementById('current-0').textContent = '0';
+document.getElementById('current-1').textContent = '0';
+//getElementById is also a method like querySelector but it is a bit faster.
+    document.getElementById('name-0').textContent = 'Player 1';
+    document.getElementById('name-1').textContent = 'Player 2';
+    document.querySelector('.player-0-panel').classList.remove('winner');
+    document.querySelector('.player-1-panel').classList.remove('winner');
+    document.querySelector('.player-0-panel').classList.remove('active');
+    document.querySelector('.player-0-panel').classList.remove('active');
+    document.querySelector('.player-0-panel').classList.add('active');
 }
